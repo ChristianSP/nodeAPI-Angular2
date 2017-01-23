@@ -10,12 +10,10 @@ import { AuthenticationService } from '../_services/index';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-    model: any = {};
     loading = false;
     error = '';
+    msg = "";
     form: FormGroup;
-
-    
 
     constructor(
         private router: Router,
@@ -35,14 +33,18 @@ export class SignupComponent implements OnInit {
     }
     signup() {
         this.loading = true;
-        this.authenticationService.signup(this.model.username,this.model.email,this.model.password)
-            .subscribe(result => {
-                if (result === true) {
-                    // login successful
-                    this.router.navigate(['/']);
+        this.authenticationService.signup(this.form.controls['username'].value,this.form.controls['email'].value,this.form.controls['password'].value)
+            .subscribe((result: any) => {
+                if (result.success === true) {
+                    this.msg = "User saved successful";
                 } else {
-                    // login failed
-                    this.error = 'Username or password is incorrect';
+                    if(result.error === "name"){
+                        this.error = 'Username already in use';
+                    }else{
+                        if(result.error === "email"){
+                            this.error = 'Email already in use';
+                        }
+                    }
                     this.loading = false;
                 }
             });

@@ -4,27 +4,32 @@
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" class="form-control" name="username" [formControl]="form.controls['username']" required />
-            <div *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched" class="help-block">Username is required</div>
-            <div *ngIf="form.controls['username'].hasError('minlength') && form.controls['username'].touched" class="help-block">Username must be at least 5 characters long.</div>
-            <div *ngIf="form.controls['username'].hasError('maxlength') && form.controls['username'].touched" class="help-block">Username cannot exceed 15 characters.</div>
+            <div *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched" class="alert-danger">Username is required</div>
+            <div *ngIf="form.controls['username'].hasError('minlength') && form.controls['username'].touched" class="alert-danger">Username must be at least 6 characters long.</div>
+            <div *ngIf="form.controls['username'].hasError('maxlength') && form.controls['username'].touched" class="alert-danger">Username cannot exceed 15 characters.</div>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
             <input type="text" class="form-control" name="email" [formControl]="form.controls['email']" required />
+            <div *ngIf="form.controls['email'].hasError('required') && form.controls['email'].touched" class="alert-danger">Email is required</div>
+            <div *ngIf="form.controls['email'].hasError('pattern') && form.controls['email'].touched" class="alert-danger">Email format is not correct</div>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" name="password" [formControl]="form.controls['password']" required />
-            <div *ngIf="form.hasError('nomatch') && form.controls['password'].touched" class="help-block">Username is required</div>
         </div>
         <div class="form-group">
             <label for="passwordConfirm">Confirm password</label>
             <input type="password" class="form-control" name="passwordConfirm" [formControl]="form.controls['confirmPassword']"  required />
+            <div *ngIf="form.hasError('nomatch') && form.controls['password'].touched" class="alert-danger">Password has to match</div>
+            <div *ngIf="form.controls['password'].hasError('minlength') && form.controls['password'].touched" class="alert-danger">Password must be at least 6 characters long.</div>
+            <div *ngIf="form.controls['password'].hasError('maxlength') && form.controls['password'].touched" class="alert-danger">Password cannot exceed 15 characters.</div>
         </div>
         <div class="form-group">
             <button [disabled]="!form.valid" class="btn btn-primary">Sign-up</button>
             <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
         </div>
         <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        <div *ngIf="msg" class="alert alert-success">{{msg}}</div>
     </form>
 </div>

@@ -48,9 +48,18 @@ router.get('/', function(req, res) {
 });
 
 router.post('/signup',function(req,res){
-    console.log(req);
-    console.log(req.body);
-    
+    User.findOne({"name": req.body.name}, function(err,user){
+      console.log("name--> "+user);
+      if(user){
+        res.json({ success: false, error: "name" });
+      }
+    });
+    User.findOne({"email": req.body.email}, function(err,user){
+      console.log("email--> "+user);
+      if(user){
+        res.json({ success: false, error: "email" });
+      }
+    });
     var newUser = new User({
       name: req.body.name,
       email: req.body.email,
