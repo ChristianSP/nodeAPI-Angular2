@@ -36,15 +36,18 @@ export class SignupComponent implements OnInit {
         this.authenticationService.signup(this.form.controls['username'].value,this.form.controls['email'].value,this.form.controls['password'].value)
             .subscribe((result: any) => {
                 if (result.success === true) {
-                    this.msg = "User saved successful";
+                    this.msg = "signup.success";
+                    this.error = "";
+                    this.loading = false;
                 } else {
                     if(result.error === "name"){
-                        this.error = 'Username already in use';
+                        this.error = 'username.exists';
                     }else{
                         if(result.error === "email"){
-                            this.error = 'Email already in use';
+                            this.error = 'email.exists';
                         }
                     }
+                    this.msg = "";
                     this.loading = false;
                 }
             });

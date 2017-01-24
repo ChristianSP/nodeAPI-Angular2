@@ -7,3 +7,14 @@
         </div>
     </div>
 </div>
+<nav class="navbar navbar-default">
+    <ul class="nav navbar-nav">
+        <li *ngFor="let lang of supportedLangs">
+            <a (click)="selectLang(lang.value)"
+            [class.active]="isCurrentLang(lang.value)">
+           
+            {{ lang.display | translate }}
+            </a>
+        </li>
+    </ul>
+</nav>

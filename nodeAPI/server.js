@@ -52,29 +52,33 @@ router.post('/signup',function(req,res){
       console.log("name--> "+user);
       if(user){
         res.json({ success: false, error: "name" });
-      }
-    });
-    User.findOne({"email": req.body.email}, function(err,user){
-      console.log("email--> "+user);
-      if(user){
-        res.json({ success: false, error: "email" });
-      }
-    });
-    var newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password)
-    });
-    console.log(newUser)
-    newUser.save(function (err){
-      if(err){
-        console.log(err) 
-        res.json({ success: false });
       }else{
-        console.log('User saved successfully');
-        res.json({ success: true });
+        User.findOne({"email": req.body.email}, function(err,user){
+          console.log("email--> "+user);
+          if(user){
+            res.json({ success: false, error: "email" });
+          }else{
+            var newUser = new User({
+              name: req.body.name,
+              email: req.body.email,
+              password: bcrypt.hashSync(req.body.password)
+            });
+            console.log(newUser)
+            newUser.save(function (err){
+              if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('User saved successfully');
+                res.json({ success: true });
+              }
+            });
+          }
+        });
       }
     });
+    
+    
 });
 
 // more routes for our API will happen here
