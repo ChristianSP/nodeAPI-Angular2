@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
- 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../_services/index';
  
 @Component({
@@ -9,13 +9,19 @@ import { AuthenticationService } from '../_services/index';
 })
  
 export class LoginComponent implements OnInit {
-    model: any = {};
+    form: FormGroup;
     loading = false;
     error = '';
  
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService) { }
+        private authenticationService: AuthenticationService,
+        private fb: FormBuilder) {
+            this.form = fb.group({
+            'username' : [null,Validators.required],
+            'password': [null,Validators.compose([Validators.required,Validators.minLength(6),Validators.maxLength(15)])]
+          })
+         }
  
     ngOnInit() {
         // reset login status
@@ -24,31 +30,22 @@ export class LoginComponent implements OnInit {
  
     login() {
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(result => {
-                if (result === true) {
+        this.authenticationService.login(this.form.controls['username'].value, this.form.controls['password'].value)
+            .subscribe((result: any) => {
+                if (result.success === true) {
                     // login successful
                     this.router.navigate(['/']);
                 } else {
                     // login failed
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;
+                    if(result.error === "name"){
+                        this.error = 'email.incorrect';
+                    }else{
+                        if(result.error === "password"){
+                            this.error = 'password.invalid';
+                        }
+                    }
                 }
-            });
-    }
-
-    signup() {
-        this.loading = true;
-        this.authenticationService.signup(this.model.username,this.model.email,this.model.password)
-            .subscribe(result => {
-                if (result === true) {
-                    // login successful
-                    this.router.navigate(['/']);
-                } else {
-                    // login failed
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;
-                }
+                this.loading = false;
             });
     }
 }

@@ -13,7 +13,7 @@ export const LANG_ES_TRANS = {
     "login.username.placeholder": "Email / Nombre de usuario",
     
     "signup": "Registrarse",
-    "signup.succes": "Registrado con éxito",
+    "signup.success": "Registrado con éxito",
     
     "email.incorrect": "El nombre de usuario/email es incorrecto",
     "email.placeholder": "Correo electrónico",
@@ -33,4 +33,5 @@ export const LANG_ES_TRANS = {
     "password.nomatch": "La contraseña debe coincidir",
     "password.minlength": "La contraseña debe tener al menos 6 caracteres",
     "password.maxlength": "La contraseña no puede tener mas de 15 caracteres",
+    "password.required": "La contraseña es obligatoria"
 };

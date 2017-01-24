@@ -13,7 +13,7 @@ export const LANG_EN_TRANS = {
     "login.username.placeholder": "Email / Username",
     
     "signup": "Sign-up",
-    "signup.succes": "Registered successfully",
+    "signup.success": "Registered successfully",
     
     "email.incorrect": "Incorrect username/email",
     "email.placeholder": "Email",
@@ -33,4 +33,5 @@ export const LANG_EN_TRANS = {
     "password.nomatch": "Password has to match",
     "password.minlength": "Password must be at least 6 characters long.",
     "password.maxlength": "Password cannot exceed 15 characters.",
+    "password.required": "Password is required"
 };

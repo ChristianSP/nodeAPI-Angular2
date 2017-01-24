@@ -8,7 +8,7 @@ import { UserService } from '../_services/index';
 })
  
 export class HomeComponent implements OnInit {
-    users: String[] = [];
+    users: any;
  
     constructor(private userService: UserService) { }
  

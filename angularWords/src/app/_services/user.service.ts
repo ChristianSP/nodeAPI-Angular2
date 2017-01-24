@@ -8,7 +8,7 @@ import { User } from '../_models/index';
  
 @Injectable()
 export class UserService {
-    private usersUrl = "http://localhost:8080/oportunidades-web/test/getUsuarios.action";
+    private usersUrl = "http://localhost:3033/api/users";
 
     constructor(
         private http: Http,
@@ -17,12 +17,11 @@ export class UserService {
  
     getUsers(): Observable<String[]> {
         // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        let headers = new Headers({ 'x-access-token': this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
-        console.log(options);
         // get users from api
-        return this.http.get(this.usersUrl, options)
-            .map((response: Response) => response.json() as String[]);
+        return this.http.post(this.usersUrl,{token: this.authenticationService.token} ,options)
+            .map((response: Response) => response.json());
     }
 }
 
