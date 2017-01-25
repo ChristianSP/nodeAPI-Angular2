@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
  
 @Injectable()
@@ -9,7 +10,7 @@ export class AuthenticationService {
     private loginUrl = "http://localhost:3033/login";
     private signupUrl = "http://localhost:3033/signup";
 
-    constructor(private http: Http) {
+    constructor(private http: Http,private router: Router) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
@@ -48,5 +49,6 @@ export class AuthenticationService {
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('currentUser');
+        this.router.navigate(['/login']);
     }
 }

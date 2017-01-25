@@ -21,7 +21,16 @@ export class UserService {
         let options = new RequestOptions({ headers: headers });
         // get users from api
         return this.http.post(this.usersUrl,{token: this.authenticationService.token} ,options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => {
+                if(response.json().success){
+                    return response.json().users;
+                }else{
+                    if(response.json().error = "noauth"){
+                        this.authenticationService.logout();
+                    }
+                    return false;
+                }
+            });
     }
 }
 

@@ -11,12 +11,14 @@ var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt-nodejs');
 var jwt    = require('jsonwebtoken');
+var middleware = require('./middleware');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token");
   next();
 });
+
 
 //DB SETUP
 var assert = require('assert');
@@ -25,7 +27,7 @@ var config = require('./config');
 mongoose.connect(config.database);
 var db = mongoose.connection;
 
-app.set('superSecret',config.secret);
+
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -39,6 +41,7 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 3033;        // set our port
 
+app.set('superSecret',config.secret);
 
 
 // ROUTES FOR OUR API
@@ -122,43 +125,12 @@ router.post('/signup',function(req,res){
 
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
-// route middleware to verify a token
-apiRoutes.use(function(req, res, next) {
 
-  // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-  // decode token
-  console.log(req.headers);
-  console.log(req.body.token);
-  if (token) {
-
-    // verifies secret and checks exp
-    jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
-      if (err) {
-        return res.json({ success: false, error: 'failed' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
-        next();
-      }
-    });
-
-  } else {
-
-    // if there is no token
-    // return an error
-    return res.status(403).send({ 
-        success: false, 
-        error: 'notoken' 
-    });
-    
-  }
-});
-
-apiRoutes.post('/users',function(req,res){
+apiRoutes.post('/users',middleware.isAuthenticated,function(req,res){
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
     User.find({},function(err,users){
       if(!err) res.json(users);
+      else res.json({error: "dberror"});
     })
 })
 
