@@ -16,6 +16,7 @@ exports.isAuthenticated = function(req, res, next) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
       if (err) {
+        console.log('noauth-request');
         return res.json({ success: false, error: 'noauth' });    
       } else {
         // if everything is good, save to request for use in other routes
@@ -28,6 +29,7 @@ exports.isAuthenticated = function(req, res, next) {
   } else {
     // if there is no token
     // return an error
+    console.log('notoken-request');
     return res.status(403).send({ 
         success: false, 
         error: 'notoken' 

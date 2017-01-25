@@ -20,7 +20,7 @@ export class UserService {
         let headers = new Headers({ 'x-access-token': this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
         // get users from api
-        return this.http.post(this.usersUrl,{token: this.authenticationService.token} ,options)
+        return this.http.post(this.usersUrl,{token:this.authenticationService.token} ,options)
             .map((response: Response) => {
                 if(response.json().success){
                     return response.json().users;

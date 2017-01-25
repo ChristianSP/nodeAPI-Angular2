@@ -129,8 +129,8 @@ var apiRoutes = express.Router();
 apiRoutes.post('/users',middleware.isAuthenticated,function(req,res){
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     User.find({},function(err,users){
-      if(!err) res.json(users);
-      else res.json({error: "dberror"});
+      if(!err) res.json({success: true,users: users});
+      else res.json({success: false, error: "dberror"});
     })
 })
 
