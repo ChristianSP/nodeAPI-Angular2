@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
          }
  
     ngOnInit() {
+        this.authenticationService.logout();
         var path = this.router.url.split('/')[1];
         if(path === "confirmEmail"){
             this.route.params

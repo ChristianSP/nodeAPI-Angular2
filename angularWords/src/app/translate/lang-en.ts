@@ -38,5 +38,7 @@ export const LANG_EN_TRANS = {
     "password.maxlength": "Password cannot exceed 15 characters.",
     "password.required": "Password is required",
 
+    "users": "Users",
+
     "error.unknown": "Unknown error"
 };

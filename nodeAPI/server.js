@@ -137,12 +137,10 @@ router.post('/login', function(req, res) {
 
 router.post('/signup',function(req,res){
     User.findOne({"name": req.body.name}, function(err,user){
-      console.log("name--> "+user);
       if(user){
         res.json({ success: false, error: "name" });
       }else{
         User.findOne({"email": req.body.email}, function(err,user){
-          console.log("email--> "+user);
           if(user){
             res.json({ success: false, error: "email" });
           }else{
@@ -152,7 +150,6 @@ router.post('/signup',function(req,res){
               password: bcrypt.hashSync(req.body.password),
               verificationToken: shortId.generate() 
             });
-            console.log(newUser)
             newUser.save(function (err,user){
               if(err){
                 console.log(err) 

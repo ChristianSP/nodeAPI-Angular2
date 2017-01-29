@@ -4,15 +4,13 @@ import { User } from '../_models/index';
 import { UserService, AuthenticationService } from '../_services/index';
 import {JwtHelper} from 'angular2-jwt/angular2-jwt';
 @Component({
-    templateUrl: './home.component.html'
+    templateUrl: './users.component.html'
 })
  
-export class HomeComponent implements OnInit {
+export class UsersComponent implements OnInit {
     users: any;
-    user: any;
-    jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private userService: UserService,private authService : AuthenticationService) { 
+    constructor(private userService: UserService) { 
     }
  
     ngOnInit() {
@@ -21,6 +19,5 @@ export class HomeComponent implements OnInit {
             .subscribe(users => {
                 if(users)this.users = users;
             });
-        this.user = this.jwtHelper.decodeToken(localStorage.getItem('currentUser'))._doc;
     }
 }

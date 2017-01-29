@@ -11,11 +11,13 @@ import { BaseRequestOptions } from '@angular/http';
 import { AppComponent }  from './app.component';
 import { routing }        from './app.routing';
  
-import { AuthGuard } from './_guards/index';
+import { AuthGuard, AdminGuard } from './_guards/index';
 import { AuthenticationService, UserService } from './_services/index';
 import { LoginComponent } from './login/index';
 import { HomeComponent } from './home/index';
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent } from './menu/index';
+import { UsersComponent } from './users/index';
+
 import { SignupComponent } from './signup/signup.component';
 import { TranslationClass} from './translate/translation';
 import { TranslatePipe} from './translate/translation.pipe';
@@ -37,10 +39,12 @@ import { TranslateService} from './translate/translation.service';
         HomeComponent,
         MenuComponent,
         SignupComponent,
+        UsersComponent,
         TranslatePipe
     ],
     providers: [
         AuthGuard,
+        AdminGuard,
         AuthenticationService,
         UserService,
         {provide: TranslationClass.TRANSLATIONS, useValue: TranslationClass.dictionary},

@@ -3,6 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
+import {JwtHelper} from 'angular2-jwt/angular2-jwt';
  
 @Injectable()
 export class AuthenticationService {
@@ -10,11 +11,15 @@ export class AuthenticationService {
     private loginUrl = "http://localhost:3033/login";
     private signupUrl = "http://localhost:3033/signup";
     private confirmEmailUrl = "http://localhost:3033/confirmEmail";
-
+    public currentUser: any;
+    jwtHelper: JwtHelper = new JwtHelper();
     constructor(private http: Http,private router: Router) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
+        if(localStorage.getItem('currentUser')){
+            this.currentUser = this.jwtHelper.decodeToken(localStorage.getItem('currentUser'))._doc;
+        }
     }
 
     confirmEmail(token: string): Observable<boolean>{
@@ -36,8 +41,9 @@ export class AuthenticationService {
                     // set token property
                     this.token = token;
  
-                    // store username and jwt token in local storage to keep user logged in between page refreshes
+                    // store username and jwt token in local storage to keep user logged in between page refreshe
                     localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
+                    this.currentUser = this.jwtHelper.decodeToken(localStorage.getItem('currentUser'))._doc;
  
                 }
                 return response.json();
@@ -56,7 +62,39 @@ export class AuthenticationService {
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
+        this.currentUser = null;
         localStorage.removeItem('currentUser');
-        this.router.navigate(['/login']);
+        var path = this.router.url.split('/')[1];
+        if(path != "signup" && path != "confirmEmail"){
+            this.router.navigate(['/login']);
+        }
     }
+
+    isLogged(): Boolean{
+        if(localStorage.getItem('currentUser')){
+            return true;
+        }else{
+            return false;
+        }
+  }
+
+  isRole(role:String): Boolean{
+        if(!this.isLogged()){
+            return false;
+        }else{
+            if(this.currentUser.role === role){
+                return true;
+            }else{
+                return false;
+            }
+        }
+  }
+
+  getCurrentUser(): any{
+      if(!this.isLogged()){
+          return null;
+      }else{
+          return this.jwtHelper.decodeToken(localStorage.getItem('currentUser'))._doc;
+      }
+  }
 }
