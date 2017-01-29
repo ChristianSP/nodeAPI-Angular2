@@ -8,6 +8,7 @@ import { AuthGuard } from './_guards/index';
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
+    { path: 'confirmEmail/:token', component: LoginComponent},
     
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
  

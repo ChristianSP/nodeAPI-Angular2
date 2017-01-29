@@ -11,9 +11,12 @@ export const LANG_EN_TRANS = {
     "login": "Login",
     "login.succes": "Logged in successfully",
     "login.username.placeholder": "Email / Username",
+    "login.verified": "Your account have been verified successfully",
+    "login.noverified": "Your account is not confirmed yet, go to your email and click the link",
+    "login.verified.already": "Your account is already confirmed",
     
     "signup": "Sign-up",
-    "signup.success": "Registered successfully",
+    "signup.success": "Registered successfully, go to your email and confirm your account",
     
     "email.incorrect": "Incorrect username/email",
     "email.placeholder": "Email",
@@ -33,5 +36,7 @@ export const LANG_EN_TRANS = {
     "password.nomatch": "Password has to match",
     "password.minlength": "Password must be at least 6 characters long.",
     "password.maxlength": "Password cannot exceed 15 characters.",
-    "password.required": "Password is required"
+    "password.required": "Password is required",
+
+    "error.unknown": "Unknown error"
 };

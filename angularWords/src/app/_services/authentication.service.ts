@@ -9,11 +9,19 @@ export class AuthenticationService {
     public token: string;
     private loginUrl = "http://localhost:3033/login";
     private signupUrl = "http://localhost:3033/signup";
+    private confirmEmailUrl = "http://localhost:3033/confirmEmail";
 
     constructor(private http: Http,private router: Router) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
+    }
+
+    confirmEmail(token: string): Observable<boolean>{
+        return this.http.post(this.confirmEmailUrl,{token: token})
+                .map((response:Response) => {
+                    return response.json();
+                })
     }
  
     login(username: string, password: string): Observable<boolean> {

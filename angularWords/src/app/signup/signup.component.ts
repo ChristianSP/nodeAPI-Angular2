@@ -28,8 +28,6 @@ export class SignupComponent implements OnInit {
          }
 
     ngOnInit() {
-        // reset login status
-        this.authenticationService.logout();
     }
     signup() {
         this.loading = true;

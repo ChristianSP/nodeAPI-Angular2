@@ -11,9 +11,12 @@ export const LANG_ES_TRANS = {
     "login": "Iniciar sesión",
     "login.success": "Se ha auntentificado correctamente",
     "login.username.placeholder": "Email / Nombre de usuario",
+    "login.verified": "Su cuenta se ha activado correctamente",
+    "login.noverified": "La cuenta no se ha confirmado todavia, vaya a su email y confirmela",
+    "login.verified.already": "Su cuenta ya se encuentra activa",
     
     "signup": "Registrarse",
-    "signup.success": "Registrado con éxito",
+    "signup.success": "Registrado con éxito, vaya a su email y confirme su cuenta",
     
     "email.incorrect": "El nombre de usuario/email es incorrecto",
     "email.placeholder": "Correo electrónico",
@@ -33,5 +36,7 @@ export const LANG_ES_TRANS = {
     "password.nomatch": "La contraseña debe coincidir",
     "password.minlength": "La contraseña debe tener al menos 6 caracteres",
     "password.maxlength": "La contraseña no puede tener mas de 15 caracteres",
-    "password.required": "La contraseña es obligatoria"
+    "password.required": "La contraseña es obligatoria",
+
+    "error.unknown": "Error desconocido"
 };

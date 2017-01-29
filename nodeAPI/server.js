@@ -12,6 +12,10 @@ var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt-nodejs');
 var jwt    = require('jsonwebtoken');
 var middleware = require('./middleware');
+var shortId = require('shortid');
+var nodemailer = require('@nodemailer/pro');
+var mailsGenerator = require('./mails');
+var config = require('./config');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -20,10 +24,29 @@ app.use(function(req, res, next) {
 });
 
 
+//Mail SETUP
+var nodemailer = require('@nodemailer/pro');
+
+// create reusable transporter object using the default SMTP transport
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: config.userMail,
+        pass: config.passMail
+    }
+});
+
+// setup email data with unicode symbols
+var mailConfirmationOptions = {
+    from: '"NO_REPLY Node Angular App"',
+    to: "",
+    subject: 'NO_REPLY Email confirmation',
+    html: ""
+};
+
 //DB SETUP
 var assert = require('assert');
 var mongoose = require('mongoose');
-var config = require('./config');
 mongoose.connect(config.database);
 var db = mongoose.connection;
 
@@ -53,40 +76,63 @@ router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
 
-router.post('/login', function(req, res) {
+router.post('/confirmEmail', function(req, res) {
+  // find the user
+  User.findOne({"verificationToken": req.body.token}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false });
+		} else if (user) {
+				// check if password matches
+				if (user.isVerified) {
+						res.json({ success: false, error: 'alreadyVerified' });
+				}else {
+						user.isVerified=true;
+						user.save(function(err,user){
+							if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('User verified successfully');
+                res.json({ success: true });
+              }
+						});
+				}   
+		}
+	});
+});
 
+router.post('/login', function(req, res) {
   // find the user
   User.findOne({$or:[
     {name: req.body.name},
-  {email: req.body.name}]
+    {email: req.body.name}]
   }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, error: 'name' });
-    } else if (user) {
-
-      // check if password matches
-      if (!bcrypt.compareSync(req.body.password, user.password)) {
-        res.json({ success: false, error: 'password' });
-      } else {
-
-        // if user is found and password is right
-        // create a token
-        var token = jwt.sign(user, app.get('superSecret'), {
-          expiresIn: '1h' // expires in 1 hours
-        });
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          token: token
-        });
-      }   
-
-    }
-
-  });
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false, error: 'name' });
+		} else if (user) {
+				// check if password matches
+				if (!bcrypt.compareSync(req.body.password, user.password)) {
+						res.json({ success: false, error: 'password' });
+				}else {
+						if(!user.isVerified){
+								res.json({ success: false, error: 'noverified' });
+						}else{
+								// if user is found and password is right
+								// create a token
+								var token = jwt.sign(user, app.get('superSecret'), {
+									expiresIn: '1h' // expires in 1 hours
+								});
+								// return the information including token as JSON
+								res.json({
+									success: true,
+									token: token
+								});
+						}
+				}   
+		}
+	});
 });
 
 router.post('/signup',function(req,res){
@@ -103,15 +149,25 @@ router.post('/signup',function(req,res){
             var newUser = new User({
               name: req.body.name,
               email: req.body.email,
-              password: bcrypt.hashSync(req.body.password)
+              password: bcrypt.hashSync(req.body.password),
+              verificationToken: shortId.generate() 
             });
             console.log(newUser)
-            newUser.save(function (err){
+            newUser.save(function (err,user){
               if(err){
                 console.log(err) 
                 res.json({ success: false });
               }else{
                 console.log('User saved successfully');
+                // send mail with defined transport object
+                mailConfirmationOptions.to = user.email;
+                mailConfirmationOptions.html = mailsGenerator.confirmationMailTemplate(user);
+                transporter.sendMail(mailConfirmationOptions, function (error, info) {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
                 res.json({ success: true });
               }
             });
@@ -147,4 +203,8 @@ app.use('/', router);
 // =============================================================================
 app.listen(port);
 console.log('Magic happens on port ' + port);
+
+
+
+
 
