@@ -8,9 +8,12 @@ import {JwtHelper} from 'angular2-jwt/angular2-jwt';
 @Injectable()
 export class AuthenticationService {
     public token: string;
-    private loginUrl = "http://localhost:3033/login";
+    /*private loginUrl = "http://localhost:3033/login";
     private signupUrl = "http://localhost:3033/signup";
-    private confirmEmailUrl = "http://localhost:3033/confirmEmail";
+    private confirmEmailUrl = "http://localhost:3033/confirmEmail";*/
+    private loginUrl = "http://wordsapi.herokuapp.com/login";
+    private signupUrl = "http://wordsapi.herokuapp.com/signup";
+    private confirmEmailUrl = "http://wordsapi.herokuapp.com/confirmEmail";
     public currentUser: any;
     jwtHelper: JwtHelper = new JwtHelper();
     constructor(private http: Http,private router: Router) {

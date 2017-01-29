@@ -8,7 +8,9 @@ import { User } from '../_models/index';
  
 @Injectable()
 export class UserService {
-    private usersUrl = "http://localhost:3033/api/users";
+    //private usersUrl = "http://localhost:3033/api/users";
+    private usersUrl = "http://wordsapi.herokuapp.com/api/users";
+    
 
     constructor(
         private http: Http,
