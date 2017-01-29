@@ -1,0 +1,17 @@
+{
+  "name": "node-api",
+  "main": "server.js",
+  "dependencies": {
+    "@nodemailer/pro": "^1.0.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.1",
+    "jwt-simple": "^0.5.1",
+    "mongodb": "^2.2.21",
+    "mongoose": "^4.7.7",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "shortid": "^2.2.6"
+  }
+}
