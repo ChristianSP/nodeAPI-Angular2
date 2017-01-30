@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <base href="/nodeAPI-Angular2/angularWords/">
-    <title>Angular QuickStart</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="styles.149d45ec806934b7a4be.bundle.css" rel="stylesheet"></head>
-
+    <!-- This stores the URL the user was attempting to go to in sessionStorage,
+    and then redirects all 404 responses to the app’s index.html page -->
+    <!-- See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/ -->
+    <script>
+      sessionStorage.redirect = location.href;
+    </script>
+    <meta http-equiv="refresh" content="0;URL='https://christiansp.github.io/nodeAPI-Angular2/angularWords'"></meta>
+  </head>
   <body>
-    <app>Loading AppComponent content here ...</app>
-  <script type="text/javascript" src="inline.1c9fd8268017edb9d82e.bundle.js"></script><script type="text/javascript" src="main.fc56f207b3a2ff3dc84a.bundle.js"></script></body>
+  </body>
 </html>
