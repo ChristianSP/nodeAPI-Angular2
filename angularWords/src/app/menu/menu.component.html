@@ -1,0 +1,12 @@
+<nav class="navbar navbar-default">
+    <ul class="nav navbar-nav">
+      <li *ngIf="!authService.isLogged()" ><a routerLink="/login" routerLinkActive="active">{{ 'login' | translate }}</a></li>
+      <li *ngIf="!authService.isLogged()" ><a routerLink="/signup" routerLinkActive="active">{{ 'signup' | translate }}</a></li>
+      <li *ngIf="authService.isLogged()"><a>{{ authService.getCurrentUser().name }}</a></li>
+      <li class="pull-left" *ngIf="authService.isRole('ADMIN')">
+            <a routerLink="/admin/users" routerLinkActive="active">
+           {{ "users" | translate }}
+            </a>
+      </li>
+    </ul>
+</nav>
