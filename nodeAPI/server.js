@@ -76,9 +76,9 @@ router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
 
-router.post('/confirmEmail', function(req, res) {
+router.post('/confirmEmail/:token', function(req, res) {
   // find the user
-  User.findOne({"verificationToken": req.body.token}, function(err, user) {
+  User.findOne({"verificationToken": req.params.token}, function(err, user) {
 		if (err) throw err;
 		if (!user) {
 				res.json({ success: false });
@@ -94,7 +94,7 @@ router.post('/confirmEmail', function(req, res) {
                 res.json({ success: false });
               }else{
                 console.log('User verified successfully');
-                res.json({ success: true });
+                res.redirect("http://angularwords.esy.es/");
               }
 						});
 				}   
