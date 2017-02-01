@@ -10,7 +10,8 @@ export const LANG_EN_TRANS = {
     
     "login": "Login",
     "login.succes": "Logged in successfully",
-    "login.username.placeholder": "Email / Username",
+    "login.username.placeholder": "Email / username",
+    "login.username.required": "Email / username is required",
     "login.verified": "Your account have been verified successfully",
     "login.noverified": "Your account is not confirmed yet, go to your email and click the link",
     "login.verified.already": "Your account is already confirmed",
@@ -37,6 +38,15 @@ export const LANG_EN_TRANS = {
     "password.minlength": "Password must be at least 6 characters long.",
     "password.maxlength": "Password cannot exceed 15 characters.",
     "password.required": "Password is required",
+    "password.forgot": "Forgot your password?",
+    "password.recover": "Recover password",
+    "password.recover.success": "Mail with recovery instructions sent",
+    "password.new": "New password",
+    "password.reset": "Reset password",
+    "password.reset.success": "Password have been change",
+    "password.reset.invalid": "Invalid token",
+    "password.reset.expired": "Token expired",
+    
 
     "users": "Users",
 

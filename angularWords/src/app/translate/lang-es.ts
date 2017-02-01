@@ -10,7 +10,8 @@ export const LANG_ES_TRANS = {
     
     "login": "Iniciar sesión",
     "login.success": "Se ha auntentificado correctamente",
-    "login.username.placeholder": "Email / Nombre de usuario",
+    "login.username.placeholder": "Email / nombre de usuario",
+    "login.username.required": "El email / nombre de usuario es obligatorio",
     "login.verified": "Su cuenta se ha activado correctamente",
     "login.noverified": "La cuenta no se ha confirmado todavia, vaya a su email y confirmela",
     "login.verified.already": "Su cuenta ya se encuentra activa",
@@ -37,6 +38,14 @@ export const LANG_ES_TRANS = {
     "password.minlength": "La contraseña debe tener al menos 6 caracteres",
     "password.maxlength": "La contraseña no puede tener mas de 15 caracteres",
     "password.required": "La contraseña es obligatoria",
+    "password.forgot": "¿Olvidaste la contraseña?",
+    "password.recover": "Recuperar contraseña",
+    "password.recover.success": "Se ha enviado un correo con las instrucciones de recuperación",
+    "password.new": "Nueva contraseña",
+    "password.reset": "Reiniciar contraseña",
+    "password.reset.success": "La contraseña se ha cambiado",
+    "password.reset.invalid": "El token no es válido",
+    "password.reset.expired": "El token ha expirado",
 
     "users": "Usuarios",
 

@@ -16,7 +16,7 @@ import { AuthenticationService, UserService, UrlService } from './_services/inde
 import { LoginComponent } from './login/index';
 import { HomeComponent } from './home/index';
 import { UsersComponent } from './users/index';
-
+import { ResetPasswordComponent } from './resetpassword/index'
 import { SignupComponent } from './signup/signup.component';
 import { TranslationClass} from './translate/translation';
 import { TranslatePipe} from './translate/translation.pipe';
@@ -38,6 +38,7 @@ import { TranslateService} from './translate/translation.service';
         HomeComponent,
         SignupComponent,
         UsersComponent,
+        ResetPasswordComponent,
         TranslatePipe
     ],
     providers: [

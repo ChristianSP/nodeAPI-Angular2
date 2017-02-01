@@ -37,10 +37,10 @@ var transporter = nodemailer.createTransport({
 });
 
 // setup email data with unicode symbols
-var mailConfirmationOptions = {
+var mailOptions = {
     from: '"NO_REPLY Node Angular App"',
     to: "",
-    subject: 'NO_REPLY Email confirmation',
+    subject: '',
     html: ""
 };
 
@@ -157,8 +157,9 @@ router.post('/signup',function(req,res){
               }else{
                 console.log('User saved successfully');
                 // send mail with defined transport object
-                mailConfirmationOptions.to = user.email;
-                mailConfirmationOptions.html = mailsGenerator.confirmationMailTemplate(user);
+                mailOptions.to = user.email;
+                mailOptions.subject = "NO_REPLY Email confirmation";
+                mailOptions.html = mailsGenerator.confirmationMailTemplate(user);
                 transporter.sendMail(mailConfirmationOptions, function (error, info) {
                     if (error) {
                         return console.log(error);
@@ -172,6 +173,70 @@ router.post('/signup',function(req,res){
         });
       }
     });
+});
+
+router.post('/recoverPassword', function(req, res) {
+  // find the user
+  User.findOne({email: req.body.email}, function(err, user) {
+		if (err) throw err;
+    if (user) {
+        var date = new Date();
+        date.setHours(date.setHours() + 1);
+
+        user.resetPasswordToken = shortId.generate();
+        user.resetPasswordExpiration = date;
+        
+        user.save(function(err,user){
+          if(err){
+            console.log(err); 
+            res.json({ success: false });
+          }else{
+            // send mail with defined transport object 
+            mailOptions.to = user.email;
+            mailOptions.subject = "NO_REPLY Password reset";
+            mailOptions.html = mailsGenerator.recoverPasswordMail(user);
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                return console.log(error);
+              }
+              console.log('Message %s sent: %s', info.messageId, info.response);
+            });
+          }
+        });
+		}
+    res.json({ success: true });
+	});
+});
+
+router.post('/resetPassword', function(req, res) {
+  User.findOne({"resetPasswordToken": req.body.token}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false, error: "invalid" });
+		} else if (user) {
+				// check if password matches
+        
+        var expirationDate = new Date(user.resetPasswordExpiration)
+        var now = new Date();
+
+				if (now > expirationDate) {
+						res.json({ success: false, error: 'expired' });
+				}else {
+						user.resetPasswordToken=null;
+            user.resetPasswordExpiration = new Date();
+            user.password = bcrypt.hashSync(req.body.password);
+						user.save(function(err,user){
+							if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('User resetpassword successfully');
+                res.json({ success: true });
+              }
+						});
+				}   
+		}
+	});
 });
 
 // more routes for our API will happen here

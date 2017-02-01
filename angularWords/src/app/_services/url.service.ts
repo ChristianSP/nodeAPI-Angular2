@@ -19,6 +19,14 @@ export class UrlService {
     confirmEmail(){
         return this.baseApiUrl+"/confirmEmail";
     }
+
+    recoverPassword(){
+        return this.baseApiUrl+"/recoverPassword";
+    }
+
+    resetPassword(){
+        return this.baseApiUrl+"/resetPassword";
+    }
  
     getUsers(){
         return this.baseApiUrl+"/api/users";

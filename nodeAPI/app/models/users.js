@@ -10,5 +10,6 @@ module.exports = mongoose.model('User', new Schema({
     role: {type:String, default: "USER"},
     verificationToken: String,
     isVerified: {type:Boolean, default: false},
-    resetPasswordToken: String
+    resetPasswordToken: String,
+    resetPasswordExpiration: String,
 }));

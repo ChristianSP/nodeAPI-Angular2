@@ -8,3 +8,11 @@ exports.confirmationMailTemplate = function(user){
     + "<p><a href='"+url+"'>Confirm account</a></p>";
     return html; 
 }
+
+exports.recoverPasswordMail = function(user){
+    var url = baseAppUrl + "/resetPassword/" + user.resetPasswordToken;
+    var html = "<h3> Recover password instructions <h3>"
+    + "<p> Hello "+ user.name + ", click in following link to reset your password</p>"
+    + "<p><a href='"+url+"'>Reset password</a></p>";
+    return html; 
+}

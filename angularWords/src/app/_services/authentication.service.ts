@@ -30,9 +30,8 @@ export class AuthenticationService {
     }
  
     login(username: string, password: string): Observable<boolean> {
-        let headers = new Headers();
         
-        return this.http.post(this.urlService.login(), { name: username, password: password },{headers: headers})
+        return this.http.post(this.urlService.login(), { name: username, password: password })
             .map((response: Response) => {
 
                 // login successful if there's a jwt token in the response
@@ -51,21 +50,33 @@ export class AuthenticationService {
     }
     
     signup(username: string,email: string, password: string): Observable<boolean> {
-        let headers = new Headers();
-
-        return this.http.post(this.urlService.signup(), { name: username,email: email, password: password },{headers: headers})
+        return this.http.post(this.urlService.signup(), { name: username,email: email, password: password })
             .map((response: Response) => {
                 return response.json();
             });
     }
- 
+
+    recoverPassword(email: string): Observable<boolean> {
+        return this.http.post(this.urlService.recoverPassword(), { email: email})
+            .map((response: Response) => {
+                return response.json();
+            });
+    }
+    
+    resetPassword(password: string,token: string): Observable<boolean> {
+        return this.http.post(this.urlService.resetPassword(), { password: password , token: token})
+            .map((response: Response) => {
+                return response.json();
+            });
+    }
+
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
         this.currentUser = null;
         localStorage.removeItem('currentUser');
         var path = this.router.url.split('/')[1];
-        if(path != "signup" && path != "confirmEmail"){
+        if(path != "signup" && path != "confirmEmail" && path != "resetPassword"){
             this.router.navigate(['/login']);
         }
     }
