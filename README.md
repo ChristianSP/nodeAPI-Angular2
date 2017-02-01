@@ -22,6 +22,7 @@ npm install
 cd nodeAPI
 npm install
 ```
+* In /nodeAPI rename _config.js to config.js and put your config
 
 # Usage
 
