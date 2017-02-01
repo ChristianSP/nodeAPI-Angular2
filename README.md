@@ -48,6 +48,6 @@ ng serve
 * Internalization
 * Jwt Authentication
 * Email confirmation
-
+* Password reset
 
 
