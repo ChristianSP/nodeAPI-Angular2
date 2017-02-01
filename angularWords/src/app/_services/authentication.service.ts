@@ -4,19 +4,16 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
 import {JwtHelper} from 'angular2-jwt/angular2-jwt';
- 
+import { UrlService } from './url.service'; 
+
+
 @Injectable()
 export class AuthenticationService {
     public token: string;
-    /*private loginUrl = "http://localhost:3033/login";
-    private signupUrl = "http://localhost:3033/signup";
-    private confirmEmailUrl = "http://localhost:3033/confirmEmail";*/
-    private loginUrl = "http://wordsapi.herokuapp.com/login";
-    private signupUrl = "http://wordsapi.herokuapp.com/signup";
-    private confirmEmailUrl = "http://wordsapi.herokuapp.com/confirmEmail";
     public currentUser: any;
     jwtHelper: JwtHelper = new JwtHelper();
-    constructor(private http: Http,private router: Router) {
+
+    constructor(private http: Http,private router: Router,private urlService : UrlService) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
@@ -26,7 +23,7 @@ export class AuthenticationService {
     }
 
     confirmEmail(token: string): Observable<boolean>{
-        return this.http.post(this.confirmEmailUrl,{token: token})
+        return this.http.post(this.urlService.confirmEmail(),{token: token})
                 .map((response:Response) => {
                     return response.json();
                 })
@@ -35,7 +32,7 @@ export class AuthenticationService {
     login(username: string, password: string): Observable<boolean> {
         let headers = new Headers();
         
-        return this.http.post(this.loginUrl, { name: username, password: password },{headers: headers})
+        return this.http.post(this.urlService.login(), { name: username, password: password },{headers: headers})
             .map((response: Response) => {
 
                 // login successful if there's a jwt token in the response
@@ -56,7 +53,7 @@ export class AuthenticationService {
     signup(username: string,email: string, password: string): Observable<boolean> {
         let headers = new Headers();
 
-        return this.http.post(this.signupUrl, { name: username,email: email, password: password },{headers: headers})
+        return this.http.post(this.urlService.signup(), { name: username,email: email, password: password },{headers: headers})
             .map((response: Response) => {
                 return response.json();
             });

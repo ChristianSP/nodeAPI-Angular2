@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuComponent } from './menu/index';
 import { TranslateService } from './translate';
+import { AuthenticationService } from './_services/index';
+
 
 @Component({
     selector: 'app',
@@ -11,7 +12,7 @@ import { TranslateService } from './translate';
 export class AppComponent implements OnInit{
     public supportedLangs: any[];
 
-    constructor(private _translate: TranslateService) { }
+    constructor(private _translate: TranslateService,private authService: AuthenticationService) { }
 
     ngOnInit() {
         // standing data
