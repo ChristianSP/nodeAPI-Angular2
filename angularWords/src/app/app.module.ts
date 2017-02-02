@@ -1,4 +1,4 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -21,7 +21,6 @@ import { SignupComponent } from './signup/signup.component';
 import { TranslationClass} from './translate/translation';
 import { TranslatePipe} from './translate/translation.pipe';
 import { TranslateService} from './translate/translation.service';
-
 
 
 @NgModule({

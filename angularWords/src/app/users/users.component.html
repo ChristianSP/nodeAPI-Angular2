@@ -1,6 +1,27 @@
-<div>
-        Users from secure api end point:
-        <ul>
-            <li *ngFor="let user of users">{{user.name}}</li>
-        </ul>
-    </div>
+<div class="container">
+    <h2>{{ 'users' | translate }}</h2>         
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Email confirmed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" (keyup)="filter($event)" id="name" placeholder="filter"></td>
+                <td><input type="text" (keyup)="filter($event)" id="email" placeholder="filter"></td>
+                <td><input type="text" (keyup)="filter($event)" id="role" placeholder="filter"></td>
+                <td><input type="text" (keyup)="filter($event)" id="isVerified" placeholder="filter"></td>
+            </tr>
+            <tr *ngFor="let user of filteredUsers">
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.role}}</td>
+                <td>{{user.isVerified}}</td>
+            <tr>
+        </tbody>
+    </table>
+</div>
