@@ -1,55 +1,39 @@
-import { Component, OnInit } from '@angular/core';
- 
-import { User } from '../_models/index';
-import { UserService, AuthenticationService } from '../_services/index';
-import {JwtHelper} from 'angular2-jwt/angular2-jwt';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { Component } from '@angular/core';
+import { UserService } from '../_services/index';
+import { TableComponent } from '../table/index';
 
 @Component({
-    templateUrl: './users.component.html'
+    selector: 'admin-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss']
 })
  
-export class UsersComponent implements OnInit {
+export class UsersComponent{
     users: any;
-    filteredUsers: Array<any>;
     settings = {
-        columns: {
-            name: {
-            title: 'Name'
-            },
-            email: {
-            title: 'Email'
-            },
-            role: {
-            title: 'Role'
-            },
-            isVerified: {
-            title: 'Email confirmed'
+        title: "users",
+        columns: [{
+            title: 'Name',
+            key: 'name'
+            },{
+            title: 'Email',
+            key: 'email'
+            },{
+            title: 'Role',
+            key: 'role'
+            }, {
+            title: 'Email confirmed',
+            key: 'isVerified'
             }
-        }
+        ]
     };
 
-    constructor(private userService: UserService) { 
-    }
- 
-    ngOnInit() {
-        // get users from secure api end point
+    constructor(private userService: UserService) {
         this.userService.getUsers()
-            .subscribe(users => {
-                if(users){
-                    this.users = users;
-                    this.filteredUsers = users;
-                }
-            });
-    }
-
-    filter(event: any){
-        this.filteredUsers = [];
-        for(let user of this.users){
-            var target: String = user[event.target.id].toString();
-            if(target.includes(event.target.value)){
-                this.filteredUsers.push(user);
+        .subscribe(users => {
+            if(users){
+                this.users = users;
             }
-        }
+        });
     }
 }

@@ -1,0 +1,24 @@
+<div class="container">
+    <h2>{{ settings.title | translate }}</h2>         
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th *ngFor="let column of settings.columns" >
+                    {{ column.title | translate }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td *ngFor="let column of settings.columns">
+                    <input type="text" [formControl]="filterInputs.controls[column.key]" (keyup)="filter($event)" id={{column.key}} placeholder="filter">
+                </td>
+            </tr>
+            <tr *ngFor="let row of filteredData">
+                <td *ngFor="let column of settings.columns">
+                    {{row[column.key]}}
+                </td>
+            <tr>
+        </tbody>
+    </table>
+</div>
