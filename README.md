@@ -49,5 +49,5 @@ ng serve
 * Jwt Authentication
 * Email confirmation
 * Password reset
-
+* Smart table with CRUD actions
 
