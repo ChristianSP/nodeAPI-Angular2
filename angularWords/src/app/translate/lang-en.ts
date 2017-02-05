@@ -56,6 +56,7 @@ export const LANG_EN_TRANS = {
     "row.create": "Create",
     "row.delete": "Delete row",
     "row.delete.confirm": "Confirm and delete",
+    "row.edit": "Edit row",
     "row.save": "Save changes",
 
     "filter": "filter...",

@@ -115,7 +115,6 @@ export class UsersComponent{
     }
 
     actionMapper(event){
-        console.log(event);
         if(event.actionKey === "passwordReset"){
             this.resetPassword(event.row);
         }

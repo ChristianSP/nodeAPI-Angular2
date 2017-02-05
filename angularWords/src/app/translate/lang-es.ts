@@ -56,6 +56,7 @@ export const LANG_ES_TRANS = {
     "row.create": "Crear",
     "row.delete": "Eliminar fila",
     "row.delete.confirm": "Confirmar y borrar",
+    "row.edit": "Editar fila",
     "row.save": "Guardar cambios",
 
     "filter": "filtrar...",

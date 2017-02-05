@@ -32,6 +32,7 @@
                 <td class="" *ngFor="let column of settings.columns">
                     <input type="text" class="form-control" [formControl]="createInputs.controls[column.key]">
                 </td>
+                <td *ngIf="settings.customActions"></td>
             <tr>
             <tr *ngFor="let row of showedData; let i = index">
                 <td *ngIf="settings.actions">
