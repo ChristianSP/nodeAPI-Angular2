@@ -4,6 +4,8 @@ export const LANG_EN_TRANS = {
     "es": "Spanish",
     "en": "English",
     
+    "github": "GitHub repository",
+
     "brand": "oriWords",
   
     "welcome": "Welcome",
@@ -47,8 +49,23 @@ export const LANG_EN_TRANS = {
     "password.reset.invalid": "Invalid token",
     "password.reset.expired": "Token expired",
     
+    "actions": "Actions",
+    "actions.custom": "Custom actions",
+    "row.add": "Add row",
+    "row.cancel": "Cancel",
+    "row.create": "Create",
+    "row.delete": "Delete row",
+    "row.delete.confirm": "Confirm and delete",
+    "row.save": "Save changes",
+
+    "filter": "filter...",
 
     "users": "Users",
+    "user.role": "Role",
+    "user.email.confirmed": "Email confirmed",
+    "user.created": "User created successfully",
+    "user.deleted": "User deleted successfully",
+    "user.edited": "User edited successfully",
 
     "error.unknown": "Unknown error"
 };

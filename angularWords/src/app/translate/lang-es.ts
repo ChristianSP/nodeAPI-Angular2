@@ -4,6 +4,8 @@ export const LANG_ES_TRANS = {
     "es": "Español",
     "en": "Inglés",
     
+    "github": "Repositorio GitHub",
+
     "brand": "oriWords",
   
     "welcome": "Bienvenido",
@@ -47,7 +49,24 @@ export const LANG_ES_TRANS = {
     "password.reset.invalid": "El token no es válido",
     "password.reset.expired": "El token ha expirado",
 
+    "actions": "Acciones",
+    "actions.custom": "Otras acciones",
+    "row.add": "Añadir fila",
+    "row.cancel": "Cancelar",
+    "row.create": "Crear",
+    "row.delete": "Eliminar fila",
+    "row.delete.confirm": "Confirmar y borrar",
+    "row.save": "Guardar cambios",
+
+    "filter": "filtrar...",
+    
     "users": "Usuarios",
+    "user.role": "Rol",
+    "user.email.confirmed": "Cuenta verificada",
+    "user.created": "Usuario creado correctamente",
+    "user.deleted": "El usuario se ha borrado",
+    "user.edited": "Usuario editado correctamente",
+    
 
     "error.unknown": "Error desconocido"
 };

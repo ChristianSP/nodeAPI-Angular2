@@ -31,4 +31,20 @@ export class UrlService {
     getUsers(){
         return this.baseApiUrl+"/api/users";
     }
+
+    createUser(){
+        return this.baseApiUrl+"/api/users/create";
+    }
+    
+    deleteUser(){
+        return this.baseApiUrl+"/api/users/delete";
+    }
+
+    editUser(){
+        return this.baseApiUrl+"/api/users/edit";
+    }
+
+    resetPasswordByAdmin(){
+        return this.baseApiUrl+"/api/users/resetPassword";
+    }
 }

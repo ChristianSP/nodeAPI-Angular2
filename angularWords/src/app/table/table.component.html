@@ -1,24 +1,66 @@
-<div class="container">
+<div class="container table-responsive">
     <h2>{{ settings.title | translate }}</h2>         
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th *ngFor="let column of settings.columns" >
+                <th *ngIf="settings.actions" class="align-middle"> 
+                    {{ 'actions' | translate }}
+                    <a  *ngIf="!adding && settings.add" (click)="add()" class="fa fa-plus pull-right" title="{{ 'row.add' | translate }}"> </a>
+                    <a *ngIf="adding && settings.add" (click)="cancelAdd()" class="fa fa-ban pull-right" title="{{ 'row.cancel' | translate }}"> </a>
+                </th>
+                <th *ngFor="let column of settings.columns" id={{column.key}} (click)="sortEvent($event)" class="align-middle"> 
                     {{ column.title | translate }}
+                    <i class="pull-right fa" [ngClass]="{'fa-sort': sorting===0 || currentSort != column.key,
+                                                'fa-sort-asc': sorting===1 && currentSort === column.key,
+                                                'fa-sort-desc': sorting===-1 && currentSort === column.key}" aria-hidden="true"></i>
+                </th>
+                <th *ngIf="settings.customActions" class="align-middle">
+                    {{ 'actions.custom' | translate }}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr *ngIf="settings.filtering">
+                <td scope="row" *ngIf="settings.actions"></td>
                 <td *ngFor="let column of settings.columns">
-                    <input type="text" [formControl]="filterInputs.controls[column.key]" (keyup)="filter($event)" id={{column.key}} placeholder="filter">
+                    <input type="text" class="form-control" [formControl]="filterInputs.controls[column.key]" (keyup)="filterEvent()" placeholder="{{'filter'|translate}}">
                 </td>
+                <td *ngIf="settings.customActions"></td>
             </tr>
-            <tr *ngFor="let row of filteredData">
+            <tr *ngIf="adding && settings.add">
+                <td *ngIf="adding"><a (click)="create()"> {{ 'row.create' | translate }} </a></td>
+                <td class="" *ngFor="let column of settings.columns">
+                    <input type="text" class="form-control" [formControl]="createInputs.controls[column.key]">
+                </td>
+            <tr>
+            <tr *ngFor="let row of showedData; let i = index">
+                <td *ngIf="settings.actions">
+                    <ul class="nav nav-pills ">
+                        <li class="nav-item" *ngIf="(!editing || currentEdit != i) && (!deleting || currentDelete != i) && settings.edit" ><a class="nav-link fa fa-pencil-square-o" aria-hidden="true" (click)="edit(row,i)" title="{{ 'row.edit' | translate }}"></a></li>
+                        <li class="nav-item" *ngIf="(!editing || currentEdit != i) && (!deleting || currentDelete != i) && settings.remove" ><a class="nav-link fa fa-trash" aria-hidden="true" (click)="delete(i)" title="{{ 'row.delete' | translate }}"></a></li>
+                        <li class="nav-item" *ngIf="editing && currentEdit === i && settings.edit" ><a class="nav-link fa fa-ban" aria-hidden="true" (click)="cancelEdit()" title="{{ 'row.cancel' | translate }}"></a></li>
+                        <li class="nav-item" *ngIf="editing && currentEdit === i && settings.edit"><a class="nav-link fa fa-floppy-o" aria-hidden="true" (click)="rowEdited(row)" title="{{ 'row.save' | translate }}"></a></li>
+                        <li class="nav-item" *ngIf="deleting && currentDelete === i && settings.remove"><a class="nav-link fa fa-ban" aria-hidden="true" (click)="cancelDelete()" title="{{ 'row.cancel' | translate }}"></a></li>
+                        <li class="nav-item" *ngIf="deleting && currentDelete === i && settings.remove"><a class="nav-link fa fa-check" aria-hidden="true" (click)="rowDeleted(row)" title="{{ 'row.delete.confirm' | translate }}"></a></li>
+                    </ul>
+                </td>
                 <td *ngFor="let column of settings.columns">
-                    {{row[column.key]}}
+                    <span class="align-middle" *ngIf="!editing || currentEdit != i"> {{row[column.key]}} </span>
+                    <input type="text" class="form-control" *ngIf="editing && currentEdit === i" [formControl]="editInputs.controls[column.key]">
+                </td>
+                <td *ngIf="settings.customActions">
+                    <ul class="nav nav-pills ">
+                        <li class="nav-item" *ngFor="let action of settings.customActions" ><a class="nav-link {{action.icon}}" aria-hidden="true" (click)="emitAction(action.key,row)" title="{{ action.title | translate }}"></a></li>
+                    </ul>
                 </td>
             <tr>
         </tbody>
     </table>
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a class="nav-link fa fa-angle-double-left" (click)="changePage(1)"></a></li>
+        <li class="nav-item"><a class="nav-link fa fa-angle-left" (click)="changePage(currentPage-1)"></a></li>
+        <li class="nav-item" *ngFor="let page of pages"><a class="nav-link" [ngClass]="{'active': currentPage===page}" (click)="changePage(page)">{{page}}</a></li>
+        <li class="nav-item"><a class="nav-link fa fa-angle-right" (click)="changePage(currentPage+1)"></a></li>
+        <li class="nav-item"><a class="nav-link fa fa-angle-double-right" (click)="changePage(nPages)"></a></li>
+    </ul>
 </div>

@@ -1,1 +1,8 @@
-<table-smart *ngIf="users" [settings]="settings" [source]="users"></table-smart>
+<table-smart *ngIf="users" [settings]="settings" [source]="users" 
+                        (created)="createUser($event)" 
+                        (deleted)="deleteUser($event)"
+                        (edited)="editUser($event)" 
+                        (actionEmitter)="actionMapper($event)">
+</table-smart>
+<div *ngIf="error" class="alert alert-danger">{{error | translate}}</div>
+<div *ngIf="msg" class="alert alert-success">{{msg | translate}}</div>

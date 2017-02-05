@@ -160,7 +160,7 @@ router.post('/signup',function(req,res){
                 mailOptions.to = user.email;
                 mailOptions.subject = "NO_REPLY Email confirmation";
                 mailOptions.html = mailsGenerator.confirmationMailTemplate(user);
-                transporter.sendMail(mailConfirmationOptions, function (error, info) {
+                transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         return console.log(error);
                     }
@@ -244,13 +244,108 @@ router.post('/resetPassword', function(req, res) {
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
 
-apiRoutes.post('/users',middleware.isAuthenticated,function(req,res){
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+apiRoutes.get('/users',middleware.isAuthenticated,function(req,res){
     User.find({},function(err,users){
       if(!err) res.json({success: true,users: users});
       else res.json({success: false, error: "dberror"});
     })
 })
+
+apiRoutes.post('/users/create',middleware.isAuthenticated,function(req,res){
+    User.findOne({"name": req.body.user.name}, function(err,user){
+      if(user){
+        res.json({ success: false, error: "name" });
+      }else{
+        User.findOne({"email": req.body.user.email}, function(err,user){
+          if(user){
+            res.json({ success: false, error: "email" });
+          }else{
+            var newUser = new User(req.body.user);
+            newUser.password = bcrypt.hashSync(shortId.generate());
+            newUser.save(function (err,user){
+              if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('User created by admin successfully');
+                res.json({ success: true });
+              }
+            });
+          }
+        });
+      }
+    });
+})
+
+apiRoutes.post('/users/delete',middleware.isAuthenticated,function(req,res){
+    User.remove({"name": req.body.user.name}, function(err,user){
+        if(err){
+          console.log(err);
+          res.json({success:false});
+        }else{
+          console.log("user deleted")
+          res.json({success:true});
+        }
+    });
+})
+
+apiRoutes.post('/users/edit',middleware.isAuthenticated,function(req,res){
+    User.findOne({"name": req.body.oldUser.name}, function(err,user){
+        if(err){
+          console.log(err);
+          res.json({success:false});
+        }else{
+          var attrsChanged = Object.keys(req.body.newUser);
+          for( var i = 0 ; i < attrsChanged.length ; i++){
+            user[attrsChanged[i]] = req.body.newUser[attrsChanged[i]];
+          }
+          user.save(function(err,user){
+            if(err){
+              console.log(err);
+              res.json({success:false});
+            }else{
+              console.log("user edited")
+              res.json({success:true});
+            }
+          })
+          
+        }
+    });
+})
+
+apiRoutes.post('/users/resetPassword', function(req, res) {
+  User.findOne({"name": req.body.user.name}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false });
+		} else if (user) {
+				var date = new Date();
+        date.setHours(date.setHours() + 1);
+
+        user.resetPasswordToken = shortId.generate();
+        user.resetPasswordExpiration = date;
+        
+        user.save(function(err,user){
+          if(err){
+            console.log(err); 
+            res.json({ success: false });
+          }else{
+            // send mail with defined transport object 
+            mailOptions.to = user.email;
+            mailOptions.subject = "NO_REPLY Password reset";
+            mailOptions.html = mailsGenerator.recoverPasswordMail(user);
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                return console.log(error);
+              }
+              console.log('Message %s sent: %s', info.messageId, info.response);
+            });
+          }
+        });
+		}
+    res.json({ success: true });
+	});
+});
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);

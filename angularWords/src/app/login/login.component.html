@@ -1,4 +1,4 @@
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-4 mx-auto">
     <h2>{{ 'login' | translate  }}</h2>
     <form name="form" (ngSubmit)="login()" [formGroup]="form">
         <div class="form-group">
@@ -21,7 +21,7 @@
         <div *ngIf="msg" class="alert alert-success">{{ msg | translate}}</div>
     </form>
 </div>
-<div *ngIf="forgotShowing" class="col-md-6 col-md-offset-3">
+<div *ngIf="forgotShowing" class="col-md-4 mx-auto">
     <form name="formRecover" (ngSubmit)="recoverPassword()" [formGroup]="formRecover">
         <div class="form-group">
             <label for="email">{{ 'email.placeholder' | translate }}</label>
