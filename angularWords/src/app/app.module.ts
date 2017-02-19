@@ -12,12 +12,13 @@ import { AppComponent }  from './app.component';
 import { routing }        from './app.routing';
  
 import { AuthGuard, AdminGuard } from './_guards/index';
-import { AuthenticationService, UserService, UrlService } from './_services/index';
+import { AuthenticationService, UserService, UrlService, SocialService } from './_services/index';
 import { LoginComponent } from './login/index';
 import { HomeComponent } from './home/index';
 import { UsersComponent } from './users/index';
 import { TableComponent } from './table/index';
-import { ResetPasswordComponent } from './resetpassword/index'
+import { ResetPasswordComponent } from './resetpassword/index';
+import { SocialComponent } from './social/index';
 import { SignupComponent } from './signup/signup.component';
 import { TranslationClass} from './translate/translation';
 import { TranslatePipe} from './translate/translation.pipe';
@@ -39,6 +40,7 @@ import { TranslateService} from './translate/translation.service';
         SignupComponent,
         UsersComponent,
         ResetPasswordComponent,
+        SocialComponent,
         TableComponent,
         TranslatePipe
     ],
@@ -48,6 +50,7 @@ import { TranslateService} from './translate/translation.service';
         AuthenticationService,
         UserService,
         UrlService,
+        SocialService,
         {provide: TranslationClass.TRANSLATIONS, useValue: TranslationClass.dictionary},
         TranslateService,
         // providers used to create fake backend

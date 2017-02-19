@@ -1,6 +1,10 @@
 // server.js
 
+//var frontUrl = "http://angularwords.esy.es/";
+var frontUrl = "http://localhost:4200";
+
 var User   = require('./app/models/users');
+
 
 // BASE SETUP
 // =============================================================================
@@ -16,10 +20,15 @@ var shortId = require('shortid');
 var nodemailer = require('@nodemailer/pro');
 var mailsGenerator = require('./mails');
 var config = require('./config');
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", frontUrl);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token");
+  //res.header("Access-Control-Allow-Methods", "*");
+  //res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
@@ -65,6 +74,56 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 3033;        // set our port
 
 app.set('superSecret',config.secret);
+
+// SOCKETIO
+io.on('connection', (socket) => {
+
+  console.log('user connected');
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+  
+  socket.on('online', (username) => {
+    console.log(username + " is online");
+    User.findOne({name: username},function(err,user){
+      if(err){
+        console.log(err);
+      }
+      if(user){
+        for(let friend of user.friends){
+          socket.join(friend.user);
+        }
+        user.status = "CONNECTED";
+        user.save(function(err,user){
+          if(err){
+            console.log(err)
+          }
+          socket.broadcast.to(user.name).emit('friendConnected',true);
+        });
+      }
+    });
+  });
+
+  socket.on('offline', (username) => {
+    console.log(username + " is offline");
+    User.findOne({name: username},function(err,user){
+      if(err){
+        console.log(err);
+      }
+      if(user){
+        socket.leaveAll();
+        user.status = "DISCONNECTED";
+        user.save(function(err,user){
+          if(err){
+            console.log(err)
+          }
+          socket.broadcast.to(user.name).emit('friendDisconnected',true);
+        });
+      }
+    });
+  });
+});
 
 
 // ROUTES FOR OUR API
@@ -347,6 +406,123 @@ apiRoutes.post('/users/resetPassword', function(req, res) {
 	});
 });
 
+apiRoutes.post('/users/addFriend', function(req, res) {
+  User.findOne({"name": req.body.newFriend.name}, function(err, newFriend) {
+		if (err) throw err;
+		if (!newFriend) {
+				res.json({ success: false });
+		} else if (newFriend) {
+      newFriend.friends.push({user: req.body.user.name,status:"PENDING"});
+      newFriend.save(function(err,newFriend){
+        if(err){
+          console.log(err);
+        }else{
+          User.findOne({"name": req.body.user.name}, function(err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.json({ success: false });
+            } else if (user) {
+              user.friends.push({user: req.body.newFriend.name,status:"SENDED"});
+              user.save(function(err,user){
+                if(err){
+                  console.log(err);
+                }else{
+                  console.log("friend request saved")
+                  res.json({ success: true });
+                }
+              });
+            }
+          });
+        }
+      });
+      
+    }
+	});
+});
+
+apiRoutes.post('/users/acceptFriend', function(req, res) {
+  User.findOne({"name": req.body.user.name}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false });
+		} else if (user) {
+      var changed = false;
+      for(var i=0;i<user.friends.length && !changed;i++){
+        if(user.friends[i].user === req.body.friend.user){
+            user.friends[i].status = "ACCEPTED";
+            changed = true;
+        }
+      }
+      user.save(function(err){
+        if(err){
+          console.log(err);
+        }else{
+          User.findOne({"name": req.body.friend.user}, function(err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.json({ success: false });
+            } else if (user) {
+              var changed = false;
+              for(var i=0;i<user.friends.length && !changed;i++){
+                if(user.friends[i].user === req.body.user.name){
+                    user.friends[i].status = "ACCEPTED";
+                    changed = true;
+                }
+              }
+              user.save(function(err){
+                if(err){
+                  console.log(err);
+                }else{
+                  
+                  console.log("accepted friend request")
+                  res.json({ success: true });
+                }
+              }); 
+            }
+          });
+        }
+      }); 
+    }
+	});
+});
+
+apiRoutes.post('/users/cancelFriend', function(req, res) {
+  User.findOne({"name": req.body.user.name}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+				res.json({ success: false });
+		} else if (user) {
+      user.friends = user.friends.filter(function(el){
+        return el.user != req.body.friend.user;
+      })
+      user.save(function(err){
+        if(err){
+          console.log(err);
+        }else{
+           User.findOne({"name": req.body.friend.user}, function(err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.json({ success: false });
+            } else if (user) {
+              user.friends = user.friends.filter(function(el){
+                return el.user != req.body.user.name;
+              })
+              user.save(function(err){
+                if(err){
+                  console.log(err);
+                }else{
+                  console.log("canceled friend request")
+                  res.json({ success: true });
+                }
+              }); 
+            }
+          });
+        }
+      }); 
+    }
+	});
+});
+
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
 
@@ -358,7 +534,7 @@ app.use('/', router);
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
+http.listen(port);
 console.log('Magic happens on port ' + port);
 
 

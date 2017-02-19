@@ -33,6 +33,19 @@ export class UserService {
             });
     }
 
+    getCurrentUser(): Observable<String>{
+        return this.getUsers().map((users:any) => {
+            var currentUser = this.authenticationService.getCurrentUser();
+            if(users){
+                for(let user of users){
+                    if(user.name === currentUser.name){
+                        return user;
+                    }
+                }
+            }
+        });
+    }
+
     createUser(user: any): Observable<String[]> {
         // add authorization header with jwt token
         let headers = new Headers({ 'x-access-token': this.authenticationService.token });
@@ -75,6 +88,42 @@ export class UserService {
             .map((response: Response) => {
                 return response.json();
             });
+    }
+
+    addFriend(newFriend: any): Observable<String[]>{
+        // add authorization header with jwt token
+        let headers = new Headers({ 'x-access-token': this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        // get users from api
+        var user = this.authenticationService.getCurrentUser();
+        return this.http.post(this.urlService.addFriend(),{user: user, newFriend: newFriend} ,options)
+            .map((response: Response) => {
+                return response.json();
+            });
+    }
+
+    acceptFriend(friend: any): Observable<String[]>{
+        // add authorization header with jwt token
+        let headers = new Headers({ 'x-access-token': this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        // get users from api
+        var user = this.authenticationService.getCurrentUser();
+        return this.http.post(this.urlService.acceptFriend(),{user: user, friend: friend} ,options)
+            .map((response: Response) => {
+                return response.json();
+            });
+    }
+
+    cancelFriend(friend: any): Observable<String[]>{
+    // add authorization header with jwt token
+    let headers = new Headers({ 'x-access-token': this.authenticationService.token });
+    let options = new RequestOptions({ headers: headers });
+    // get users from api
+    var user = this.authenticationService.getCurrentUser();
+    return this.http.post(this.urlService.cancelFriend(),{user: user, friend: friend} ,options)
+        .map((response: Response) => {
+            return response.json();
+        });
     }
 }
 

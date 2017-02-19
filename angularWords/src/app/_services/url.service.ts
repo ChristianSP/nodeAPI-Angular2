@@ -7,7 +7,11 @@ export class UrlService {
 
     constructor() {
     }
- 
+    
+    api(){
+        return this.baseApiUrl;
+    }
+
     login() {
         return this.baseApiUrl+"/login";
     }
@@ -46,5 +50,17 @@ export class UrlService {
 
     resetPasswordByAdmin(){
         return this.baseApiUrl+"/api/users/resetPassword";
+    }
+
+    addFriend(){
+        return this.baseApiUrl+"/api/users/addFriend";
+    }
+
+    acceptFriend(){
+        return this.baseApiUrl+"/api/users/acceptFriend";
+    }
+
+    cancelFriend(){
+        return this.baseApiUrl+"/api/users/cancelFriend";
     }
 }

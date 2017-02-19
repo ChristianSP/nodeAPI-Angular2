@@ -1,0 +1,85 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a [class.active]= "currentTab === 'friends'" 
+                (click)="currentTab = 'friends'" 
+                class="nav-link">{{ 'friends' | translate}}</a>
+        </li>
+        <li class="nav-item">
+            <a [class.active]= "currentTab === 'search'"  
+                (click)="currentTab = 'search'"
+                class="nav-link">{{ 'search' | translate}}</a>
+        </li>
+    </ul>
+</div>
+<div *ngIf="currentTab === 'search'" class="row">
+         <input type="text" 
+            class="form-control" 
+            [formControl]="searchInput"
+            (keyup)="searchUsers()">
+    
+        <ul class="list-group w-100">
+            <li *ngFor="let user of filteredUsers" class="list-group-item d-flex justify-content-between">
+                <span>{{ user.name }}</span>
+                <button (click)="addFriend(user)" type="button" title="{{ 'friends.add' | translate }}" 
+                        class="btn btn-primary px-2 py-1">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+            </li>
+        </ul>
+</div>
+<div *ngIf="currentTab === 'friends'" class="row">
+    <ul class="list-group w-100">
+            <li (click)="pendingCollapsed = !pendingCollapsed" class="list-group-item d-flex justify-content-between"
+                data-toggle="collapse"
+                data-target="#pendingsRequests" aria-expanded="false" aria-controls="pendingsRequests">
+                <span>{{ 'friends.pending' | translate}}</span>
+                <i [ngClass]="{'fa-chevron-down': pendingCollapsed,'fa-chevron-up': !pendingCollapsed }" class="fa" aria-hidden="true"></i>
+            </li>
+            <div class="collapse" id="pendingsRequests">
+                <li *ngFor="let pendingFriend of pendingFriends" class="list-group-item d-flex justify-content-between">
+                    <span>{{ pendingFriend.user }}</span>
+                    <div>
+                        <button (click)="acceptFriend(pendingFriend)" type="button" title="{{ 'friends.accept' | translate }}" 
+                                class="btn btn-primary btn-success px-2 py-1">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                        <button (click)="cancelFriend(pendingFriend)" type="button" title="{{ 'friends.cancel' | translate }}" 
+                                class="btn btn-primary btn-warning px-2 py-1">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </li>
+            </div>
+
+            <li (click)="connectedCollapsed = !connectedCollapsed" class="list-group-item d-flex justify-content-between"
+                data-toggle="collapse"
+                data-target="#friendsConnected" aria-expanded="false" aria-controls="friendsConnected">
+                <span>{{ 'friends.connected' | translate}}</span>
+                <i [ngClass]="{'fa-chevron-down': connectedCollapsed,'fa-chevron-up': !connectedCollapsed }" class="fa" aria-hidden="true"></i>
+            </li>
+            <div class="collapse" id="friendsConnected">
+                <li *ngFor="let connectedFriend of connectedFriends" class="list-group-item d-flex justify-content-between">
+                    <span><i class="fa fa-circle text-success mr-1" aria-hidden="true"></i>{{ connectedFriend.user }}</span>
+                    <div>
+                        <button (click)="chat(connectedFriend)" type="button" title="{{ 'friends.chat' | translate }}" 
+                                class="btn btn-primary px-2 py-1">
+                                <i class="fa fa-commenting" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </li>
+            </div>
+
+            <li (click)="disconnectedCollapsed = !disconnectedCollapsed" class="list-group-item d-flex justify-content-between"
+                data-toggle="collapse"
+                data-target="#friendsDisconnected" aria-expanded="false" aria-controls="friendsDisconnected">
+                <span>{{ 'friends.disconnected' | translate}}</span>
+                <i [ngClass]="{'fa-chevron-down': disconnectedCollapsed,'fa-chevron-up': !disconnectedCollapsed }" class="fa" aria-hidden="true"></i>
+            </li>
+            <div class="collapse" id="friendsDisconnected">
+                <li *ngFor="let disconnectedFriend of disconnectedFriends" class="list-group-item d-flex justify-content-between">
+                    <span>{{ disconnectedFriend.user }}</span>
+                </li>
+            </div>
+    </ul>
+</div>

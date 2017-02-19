@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../_models/index';
 import { UserService, AuthenticationService } from '../_services/index';
 import {JwtHelper} from 'angular2-jwt/angular2-jwt';
+import { SocialComponent } from '../social/index';
+
 @Component({
     templateUrl: './home.component.html'
 })

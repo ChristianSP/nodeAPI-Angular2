@@ -68,6 +68,13 @@ export const LANG_ES_TRANS = {
     "user.deleted": "El usuario se ha borrado",
     "user.edited": "Usuario editado correctamente",
     
+    "friends": "Amigos",
+    "friends.add": "Enviar solicitud",
+    "friends.pending": "Pendientes",
+    "friends.connected": "Conectados",
+    "friends.disconnected": "Desconectados",
+
+    "search": "Buscar",
 
     "error.unknown": "Error desconocido"
 };
