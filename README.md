@@ -50,4 +50,5 @@ ng serve
 * Email confirmation
 * Password reset
 * Smart table with CRUD actions
+* Social component (friends online/offline real-time) ( ¡¡ and chat coming soon !! )
 
