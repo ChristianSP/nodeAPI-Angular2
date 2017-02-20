@@ -1,6 +1,6 @@
 // server.js
 
-//var frontUrl = "http://angularwords.esy.es/";
+//var frontUrl = "http://angularwords.esy.es";
 var frontUrl = "http://localhost:4200";
 
 var User   = require('./app/models/users');
@@ -94,6 +94,7 @@ io.on('connection', (socket) => {
         for(let friend of user.friends){
           socket.join(friend.user);
         }
+        socket.join(user.name);
         user.status = "CONNECTED";
         user.save(function(err,user){
           if(err){
@@ -103,6 +104,18 @@ io.on('connection', (socket) => {
         });
       }
     });
+  });
+
+  socket.on('requestSended', (data) => {
+    console.log(data.reciever + " recieve a friend request by " +data.sender);
+    //Avisar al que la recibe que actualice su lista
+    socket.broadcast.to(data.reciever).emit('friendConnected',true);
+  });
+
+  socket.on('requestAccepted', (data) => {
+    console.log(data.accepter + " accept a friend request of "+data.accepted);
+    //Avisar al aceptado que actualice su lista
+    socket.broadcast.to(data.accepted).emit('friendConnected',true);
   });
 
   socket.on('offline', (username) => {

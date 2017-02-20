@@ -102,6 +102,7 @@ export class SocialComponent implements OnInit, OnDestroy{
                 this.getUsers();
                 this.searchUsers();
                 this.prepareFriends();
+                this.socialService.requestSended(this.currentUser.name,user.name);
             }
         });
     }
@@ -144,6 +145,7 @@ export class SocialComponent implements OnInit, OnDestroy{
         .subscribe((res:any) => {
             if(res.success){
                 this.prepareFriends();
+                this.socialService.requestAccepted(this.currentUser.name,friend.user);
             }
         });
     }

@@ -18,7 +18,7 @@ export class SocialService {
     let observable = new Observable(observer => {
       this.socket = io(this.urlService.api());
       this.socket.emit('online',this.currentUser.name);
-      
+
       this.socket.on('friendConnected', (data) => {
         console.log("Somenone connected... reloading friends")
         observer.next(data);    
@@ -33,5 +33,13 @@ export class SocialService {
       };  
     })     
     return observable;
-  }  
+  }
+
+  requestSended(sender, reciever){
+      this.socket.emit('requestSended',{sender: sender, reciever: reciever});
+  }
+
+  requestAccepted(accepter, accepted){
+      this.socket.emit('requestAccepted',{accepter: accepter, accepted: accepted});
+  }   
 }
