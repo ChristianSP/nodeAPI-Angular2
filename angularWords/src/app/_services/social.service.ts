@@ -27,6 +27,19 @@ export class SocialService {
         console.log("Somenone disconnected... reloading friends")
         observer.next(data);    
       });
+      this.socket.on('requestRecieved', (data) => {
+          if(this.currentUser.name === data.reciever){
+              this.socket.emit('updateJoinFriends',data.reciever);
+          }
+          observer.next(data);
+      });
+      this.socket.on('requestAccepted', (data) => {
+          if(this.currentUser.name === data.accepted){
+              this.socket.emit('updateJoinFriends',data.accepted);
+          }
+          observer.next(data);
+      });
+
       return () => {
         this.socket.emit('offline',this.currentUser.name); 
         this.socket.disconnect();

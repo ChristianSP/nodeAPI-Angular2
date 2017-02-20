@@ -106,16 +106,31 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('updateJoinFriends', (username) => {
+    User.findOne({name: username},function(err,user){
+      if(err){
+        console.log(err);
+      }
+      if(user){
+        socket.leaveAll();
+        for(let friend of user.friends){
+          socket.join(friend.user);
+        }
+        socket.join(user.name);
+      }
+    });
+  });
+
   socket.on('requestSended', (data) => {
     console.log(data.reciever + " recieve a friend request by " +data.sender);
     //Avisar al que la recibe que actualice su lista
-    socket.broadcast.to(data.reciever).emit('friendConnected',true);
+    socket.broadcast.to(data.reciever).emit('requestRecieved',data);
   });
 
   socket.on('requestAccepted', (data) => {
     console.log(data.accepter + " accept a friend request of "+data.accepted);
     //Avisar al aceptado que actualice su lista
-    socket.broadcast.to(data.accepted).emit('friendConnected',true);
+    socket.broadcast.to(data.accepted).emit('requestAccepted',data);
   });
 
   socket.on('offline', (username) => {
