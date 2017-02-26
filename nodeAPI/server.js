@@ -81,11 +81,27 @@ io.on('connection', (socket) => {
   console.log('user connected');
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log(socket.username + " is offline");
+    User.findOne({name: socket.username},function(err,user){
+        if(err){
+          console.log(err);
+        }
+        if(user){
+          socket.leaveAll();
+          user.status = "DISCONNECTED";
+          user.save(function(err,user){
+            if(err){
+              console.log(err)
+            }
+            socket.broadcast.to(user.name).emit('friendDisconnected',true);
+          });
+        }
+      });
   });
   
   socket.on('online', (username) => {
     console.log(username + " is online");
+    socket.username = username;
     User.findOne({name: username},function(err,user){
       if(err){
         console.log(err);
@@ -133,24 +149,6 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.accepted).emit('requestAccepted',data);
   });
 
-  socket.on('offline', (username) => {
-    console.log(username + " is offline");
-    User.findOne({name: username},function(err,user){
-      if(err){
-        console.log(err);
-      }
-      if(user){
-        socket.leaveAll();
-        user.status = "DISCONNECTED";
-        user.save(function(err,user){
-          if(err){
-            console.log(err)
-          }
-          socket.broadcast.to(user.name).emit('friendDisconnected',true);
-        });
-      }
-    });
-  });
 });
 
 

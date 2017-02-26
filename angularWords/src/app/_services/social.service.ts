@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SocialService {
-  private socket;
+  private socket: SocketIOClient.Socket;
   private currentUser;
   constructor(private urlService : UrlService,private authService: AuthenticationService){
       this.currentUser = this.authService.getCurrentUser();
@@ -41,7 +41,6 @@ export class SocialService {
       });
 
       return () => {
-        this.socket.emit('offline',this.currentUser.name); 
         this.socket.disconnect();
       };  
     })     
