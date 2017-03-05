@@ -4,6 +4,8 @@
 var frontUrl = "http://localhost:4200";
 
 var User   = require('./app/models/users');
+var Liga   = require('./app/models/ligas');
+var Jornada = require('./app/models/jornadas');
 
 
 // BASE SETUP
@@ -547,6 +549,145 @@ apiRoutes.post('/users/cancelFriend', function(req, res) {
       }); 
     }
 	});
+});
+
+apiRoutes.get('/ligas',middleware.isAuthenticated,function(req,res){
+    Liga.find({},function(err,ligas){
+      if(!err) res.json({success: true,ligas: ligas});
+      else res.json({success: false, error: "dberror"});
+    })
+});
+
+apiRoutes.post('/ligas/create',middleware.isAuthenticated,function(req,res){
+    Liga.findOne({"name": req.body.liga.name}, function(err,liga){
+      if(liga){
+        res.json({ success: false, error: "name" });
+      }else{
+        Liga.findOne({"idApi": req.body.liga.idApi}, function(err,liga){
+          if(liga){
+            res.json({ success: false, error: "idApi" });
+          }else{
+            var newLiga = new Liga(req.body.liga);
+            newLiga.save(function (err,liga){
+              if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('Liga created by admin successfully');
+                res.json({ success: true });
+              }
+            });
+          }
+        });
+      }
+    });
+});
+
+apiRoutes.post('/ligas/delete',middleware.isAuthenticated,function(req,res){
+    Liga.remove({"name": req.body.liga.name}, function(err,liga){
+        if(err){
+          console.log(err);
+          res.json({success:false});
+        }else{
+          console.log("liga deleted")
+          res.json({success:true});
+        }
+    });
+});
+
+apiRoutes.post('/ligas/edit',middleware.isAuthenticated,function(req,res){
+    Liga.findOne({"name": req.body.oldLiga.name}, function(err,liga){
+        if(err){
+          console.log(err);
+          res.json({success:false});
+        }else{
+          var attrsChanged = Object.keys(req.body.newLiga);
+          for( var i = 0 ; i < attrsChanged.length ; i++){
+            liga[attrsChanged[i]] = req.body.newLiga[attrsChanged[i]];
+          }
+          liga.save(function(err,liga){
+            if(err){
+              console.log(err);
+              res.json({success:false});
+            }else{
+              console.log("liga edited")
+              res.json({success:true});
+            }
+          })
+          
+        }
+    });
+});
+
+apiRoutes.get('/jornadas',middleware.isAuthenticated,function(req,res){
+    Jornada.find({},function(err,jornadas){
+      if(!err) res.json({success: true,jornadas: jornadas});
+      else res.json({success: false, error: "dberror"});
+    })
+});
+
+apiRoutes.post('/jornadas/create',middleware.isAuthenticated,function(req,res){
+    Jornada.findOne({$or:[
+    {liga: req.body.jornada.liga, inicio: req.body.jornada.inicio},
+    {liga: req.body.jornada.liga, fin: req.body.jornada.fin},
+    {liga: req.body.jornada.liga, matchday: req.body.jornada.matchday}]}, function(err,jornada){
+      if(jornada){
+        res.json({ success: false });
+      }else{
+            var newJornada = new Jornada(req.body.jornada);
+            newJornada.save(function (err,jornada){
+              if(err){
+                console.log(err) 
+                res.json({ success: false });
+              }else{
+                console.log('Jornada created by admin successfully');
+                res.json({ success: true });
+              }
+            });
+          }
+    });
+});
+
+apiRoutes.post('/jornadas/delete',middleware.isAuthenticated,function(req,res){
+    Jornada.remove({"liga": req.body.jornada.liga,"matchday": req.body.jornada.matchday}, function(err,liga){
+        if(err){
+          console.log(err);
+          res.json({success:false});
+        }else{
+          console.log("jornada deleted")
+          res.json({success:true});
+        }
+    });
+});
+
+apiRoutes.post('/jornadas/edit',middleware.isAuthenticated,function(req,res){
+    //TODO
+});
+
+apiRoutes.post('/jornadas/currentByLiga',middleware.isAuthenticated,function(req,res){
+    Jornada.find({liga: req.body.liga.name}, function(err,jornadas){
+      if(!jornadas || err){
+        res.json({ success: false });
+      }else{
+            var hoy = new Date();
+            var encontrado = false;
+            var i = 0;
+            while(!encontrado && i<jornadas.length){
+              var inicio = new Date(jornadas[i].inicio);
+              var fin = new Date(jornadas[i].fin);
+              if(hoy > inicio && hoy < fin){
+                encontrado = true;
+              }else{
+                i++;
+              }
+            }
+            if(encontrado){
+              res.json({success: true, jornada: jornadas[i]});
+            }else{
+              res.json({success: false});
+            }
+      }
+    });
 });
 
 // apply the routes to our application with the prefix /api

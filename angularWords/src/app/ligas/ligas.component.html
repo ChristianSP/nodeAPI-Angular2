@@ -1,0 +1,7 @@
+<table-smart [settings]="settings" [source]="ligas" 
+                        (created)="create($event)" 
+                        (deleted)="delete($event)"
+                        (edited)="edit($event)">
+</table-smart>
+<div *ngIf="error" class="alert alert-danger">{{error | translate}}</div>
+<div *ngIf="msg" class="alert alert-success">{{msg | translate}}</div>

@@ -5,6 +5,8 @@ export class UrlService {
     //private baseApiUrl = "http://wordsapi.herokuapp.com"
     private baseApiUrl = "http://localhost:3033"
 
+    private footballApiUrl = "http://api.football-data.org/v1"
+
     constructor() {
     }
     
@@ -62,5 +64,53 @@ export class UrlService {
 
     cancelFriend(){
         return this.baseApiUrl+"/api/users/cancelFriend";
+    }
+
+    getCompetition(id){
+        return this.footballApiUrl+"/competitions/"+id;
+    }
+
+    getTeamsByCompetition(idCompetition){
+        return this.footballApiUrl+"/competitions/"+idCompetition+"/teams";
+    }
+
+    getFixturesByCompetitionAndMatchDay(idCompetition,matchDay){
+        return this.footballApiUrl+"/competitions/"+idCompetition+"/fixtures?matchday="+matchDay;
+    }
+
+    getLigas(){
+        return this.baseApiUrl+"/api/ligas";
+    }
+
+    createLiga(){
+        return this.baseApiUrl+"/api/ligas/create";
+    }
+    
+    deleteLiga(){
+        return this.baseApiUrl+"/api/ligas/delete";
+    }
+
+    editLiga(){
+        return this.baseApiUrl+"/api/ligas/edit";
+    }
+
+    getJornadas(){
+        return this.baseApiUrl+"/api/jornadas";
+    }
+
+    createJornada(){
+        return this.baseApiUrl+"/api/jornadas/create";
+    }
+    
+    deleteJornada(){
+        return this.baseApiUrl+"/api/jornadas/delete";
+    }
+
+    editJornada(){
+        return this.baseApiUrl+"/api/jornadas/edit";
+    }
+
+    getCurrentJornadaByLiga(){
+        return this.baseApiUrl+"/api/jornadas/currentByLiga";
     }
 }

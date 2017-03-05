@@ -1,8 +1,43 @@
 <div class = "row">
     <div class="col-lg-9 col-sm-9 col-md-9">
-        <h1>Home</h1>
-        <p>You're logged in with JWT!!</p>
-        <p><a [routerLink]="['/login']">Logout</a></p>
+          <div class="form-group">
+            <label for="ligaSelect">{{ 'ligas.select' | translate}}</label>
+            <select [ngModel]="selectedLiga" (ngModelChange)="updateLigaInfo($event)" class="form-control" id="ligaSelect">
+            <option></option>
+            <option [ngValue]="liga" *ngFor="let liga of ligas">{{ liga.name }}</option>
+            </select>
+        </div>
+        <ul class="list-group w-100">
+                <div *ngFor="let partido of jornada">
+                    <li class="list-group-item">
+                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                <img src="{{ getTeamCrestByName(partido.homeTeamName) }}" height="20" width="17">
+                                <span>{{partido.homeTeamName}}</span>
+                            </div>
+                            <h4 class="col-lg-2 col-md-2 col-sm-2 d-flex justify-content-center">{{partido.result.goalsHomeTeam}} - {{partido.result.goalsAwayTeam}}</h4>
+                            <div class="col-lg-5 col-md-5 col-sm-5 text-right align-middle">
+                                <span>{{partido.awayTeamName}}</span>
+                                <img src="{{ getTeamCrestByName(partido.awayTeamName) }}" height="20" width="17">
+                            </div>
+                    </li>
+                </div>
+        </ul>
+        <ul class="list-group w-100">
+                <div *ngFor="let team of teams">
+                    <li class="list-group-item d-flex justify-content-between"
+                        data-toggle="collapse"
+                        [attr.data-target]="'#'+team.shortName.split(' ').join('')" aria-expanded="false" [attr.aria-controls]="team.shortName.split(' ').join('')">
+                        <span>{{ team.name }}</span>
+                        <img src="{{ team.crestUrl }}" height="20" width="17">
+                    </li>
+                    <div class="collapse teamPlayers" id="{{team.shortName.split(' ').join('')}}">
+                        <li *ngFor="let player of team.players" class="list-group-item d-flex justify-content-between">
+                            <span>{{player.name}}</span>
+                            <span>{{ 'value' | translate}}: {{player.marketValue}}</span>
+                        </li>
+                    </div>
+                </div>
+        </ul>
     </div>
     <div class="col-lg-3 col-sm-3 col-md-3">
         <social-component></social-component>

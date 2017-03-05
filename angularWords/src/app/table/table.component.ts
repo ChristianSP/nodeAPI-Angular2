@@ -10,7 +10,7 @@ import { FormGroup, FormControl } from '@angular/forms';
  
 export class TableComponent implements OnInit,OnChanges {
     /*Lista de datos que se muestran*/
-    showedData: Array<any>;
+    showedData: Array<any>
     
     /*Contenedor de los input asignados al filtro.
     Nos permite acceder a su valor*/
@@ -175,6 +175,11 @@ export class TableComponent implements OnInit,OnChanges {
         //Validar el valor de acciones si todas vienen a falso
         if(this.settings.add === false && this.settings.remove === false && this.settings.edit === false){
             this.settings.actions = false;   
+        }
+
+        //Valida que los datos de entrada no sean undefined o null y ponerlos a vacio
+        if(this.data === undefined || this.data === null){
+            this.data = [];
         }
 
     }

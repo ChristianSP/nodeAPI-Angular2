@@ -7,10 +7,20 @@
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item" *ngIf="!authService.isLogged()" ><a class="nav-link" routerLink="/login" routerLinkActive="active">{{ 'login' | translate }}</a></li>
             <li class="nav-item" *ngIf="!authService.isLogged()" ><a class="nav-link" routerLink="/signup" routerLinkActive="active">{{ 'signup' | translate }}</a></li>
-            <li class="nav-item" *ngIf="authService.isLogged()"><a class="nav-link">{{ authService.getCurrentUser().name }}</a></li>
+            <li class="nav-item" *ngIf="authService.isLogged()"><a routerLink="/" routerLinkActive="active" class="nav-link">{{ authService.getCurrentUser().name }}</a></li>
             <li class="nav-item" *ngIf="authService.isRole('ADMIN')">
                     <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
                 {{ "users" | translate }}
+                    </a>
+            </li>
+            <li class="nav-item" *ngIf="authService.isRole('ADMIN')">
+                    <a class="nav-link" routerLink="/admin/ligas" routerLinkActive="active">
+                {{ "ligas" | translate }}
+                    </a>
+            </li>
+            <li class="nav-item" *ngIf="authService.isRole('ADMIN')">
+                    <a class="nav-link" routerLink="/admin/jornadas" routerLinkActive="active">
+                {{ "jornadas" | translate }}
                     </a>
             </li>
         </ul>

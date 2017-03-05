@@ -54,9 +54,12 @@ export const LANG_ES_TRANS = {
     "row.add": "Añadir fila",
     "row.cancel": "Cancelar",
     "row.create": "Crear",
+    "row.created": "Registro creado correctamente",
     "row.delete": "Eliminar fila",
+    "row.deleted": "Registro eliminado correctamente",
     "row.delete.confirm": "Confirmar y borrar",
     "row.edit": "Editar fila",
+    "row.edited": "Registro editado correctamente",
     "row.save": "Guardar cambios",
 
     "filter": "filtrar...",
@@ -74,7 +77,20 @@ export const LANG_ES_TRANS = {
     "friends.connected": "Conectados",
     "friends.disconnected": "Desconectados",
 
+    "ligas": "Ligas",
+    "ligas.name.placeholder": "Nombre",
+    "ligas.idApi.placeholder": "API id",
+    "ligas.select": "Selecciona una liga",
+
+    "jornadas": "Jornadas",
+    "jornadas.liga.placeholder": "Liga",
+    "jornadas.inicio.placeholder": "Empieza",
+    "jornadas.fin.placeholder": "Termina",
+    "jornadas.matchday.placeholder": "Jornada",
+
     "search": "Buscar",
+
+    "value": "Valor",
 
     "error.unknown": "Error desconocido"
 };

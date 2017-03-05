@@ -6,6 +6,9 @@ import { HomeComponent } from './home';
 import { AuthGuard, AdminGuard } from './_guards/index';
 import { UsersComponent } from './users/index';
 import { ResetPasswordComponent } from './resetpassword/index'
+import { LigasComponent } from './ligas/ligas.component';
+import { JornadasComponent } from './jornadas/jornadas.component';
+
 
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -14,6 +17,9 @@ const appRoutes: Routes = [
     { path: 'resetPassword/:token', component: ResetPasswordComponent},
     
     { path: 'admin/users', component: UsersComponent, canActivate: [AdminGuard]},
+    { path: 'admin/ligas', component: LigasComponent, canActivate: [AdminGuard]},
+    { path: 'admin/jornadas', component: JornadasComponent, canActivate: [AdminGuard]},
+    
     
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
  
