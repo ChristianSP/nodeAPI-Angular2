@@ -25,6 +25,7 @@
         <ul class="list-group w-100">
                 <div *ngFor="let team of teams">
                     <li class="list-group-item d-flex justify-content-between"
+                        (click)="loadTeamPlayers(team)"
                         data-toggle="collapse"
                         [attr.data-target]="'#'+team.shortName.split(' ').join('')" aria-expanded="false" [attr.aria-controls]="team.shortName.split(' ').join('')">
                         <span>{{ team.name }}</span>

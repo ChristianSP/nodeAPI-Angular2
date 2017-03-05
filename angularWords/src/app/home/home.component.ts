@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
     jwtHelper: JwtHelper = new JwtHelper();
 
     teams: any;
-
     jornada: any;
 
     ligas: any;
@@ -46,24 +45,22 @@ export class HomeComponent implements OnInit {
     }
 
     getTeamCrestByName(nameTeam){
-        return this.teams.filter(function(el){ return el.name == nameTeam })[0].crestUrl;
+        if(this.teams && this.teams.length > 0){
+            return this.teams.filter(function(el){ return el.name == nameTeam })[0].crestUrl;
+        }else{
+            return "";
+        }
     }
 
     updateLigaInfo(liga){
         if(liga){
             this.selectedLiga=liga;
+            this.jornada=[];
+            this.teams=[];
             this.footballService.getTeamsByCompetition(liga.idApi)
                 .subscribe((res:any) => {
                     if(res.teams){
                         this.teams = res.teams;
-                        for(let team of this.teams){
-                            this.footballService.getPlayersByTeamURL(team._links.players.href)
-                                .subscribe((res:any) => {
-                                    if(res.players){
-                                        team.players = res.players
-                                    }
-                                });
-                        }
                     }
                 });
             this.jornadaService.getCurrentJornadaByLiga(liga).subscribe((jornada:any) => {
@@ -76,6 +73,17 @@ export class HomeComponent implements OnInit {
                     });
                 }
             });
+        }
+    }
+
+    loadTeamPlayers(team){
+        if(!team.players){
+            this.footballService.getPlayersByTeamURL(team._links.players.href)
+                .subscribe((res:any) => {
+                    if(res.players){
+                        team.players = res.players
+                    }
+                });
         }
     }
 }
