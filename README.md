@@ -53,4 +53,5 @@ ng serve
 * Password reset
 * Smart table with CRUD actions
 * Social component (friends online/offline real-time) ( ¡¡ and chat coming soon !! )
+* Football API integration ( Really thanks to http://api.football-data.org )
 
